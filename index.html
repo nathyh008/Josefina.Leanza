@@ -1,1426 +1,1652 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Laboratorio Científico</title>
+<title>🌈 Misión 6.º</title>
 
 <style>
+
 *{
-    box-sizing:border-box;
-    margin:0;
-    padding:0;
+ box-sizing:border-box;
 }
 
 body{
-    font-family:Arial,Helvetica,sans-serif;
-    min-height:100vh;
-    background:
-        radial-gradient(circle at top left,#4c1d95 0%,transparent 35%),
-        radial-gradient(circle at bottom right,#0369a1 0%,transparent 35%),
-        linear-gradient(135deg,#08111f,#101b35 50%,#071827);
-    color:#fff;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:18px;
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:linear-gradient(
+  135deg,
+  #75d5ff,
+  #9d8cff,
+  #ff9fca
+ );
+ min-height:100vh;
+ padding:15px;
+ color:#35355c;
 }
 
-.game{
-    width:100%;
-    max-width:760px;
-    background:rgba(255,255,255,.97);
-    color:#182033;
-    border-radius:28px;
-    padding:28px;
-    box-shadow:0 25px 70px rgba(0,0,0,.45);
-    overflow:hidden;
+.container{
+ max-width:950px;
+ margin:auto;
+ background:white;
+ border-radius:30px;
+ padding:22px;
+ box-shadow:0 15px 45px #403b7a55;
 }
 
-.hidden{
-    display:none!important;
+header{
+ text-align:center;
 }
 
-/* INICIO */
-
-.start{
-    text-align:center;
-}
-
-.logo{
-    font-size:70px;
-    animation:float 2s ease-in-out infinite;
-}
-
-@keyframes float{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-8px)}
+.badge{
+ display:inline-block;
+ background:linear-gradient(
+  90deg,
+  #ff579b,
+  #655de8
+ );
+ color:white;
+ padding:7px 18px;
+ border-radius:20px;
+ font-weight:bold;
 }
 
 h1{
-    font-size:34px;
-    margin:10px 0;
-}
-
-.start h2{
-    font-size:24px;
-    margin:18px 0 10px;
-}
-
-.start p{
-    color:#64748b;
-    line-height:1.6;
-    margin-bottom:14px;
-}
-
-.start-button,
-.restart-button{
-    width:100%;
-    border:0;
-    border-radius:16px;
-    padding:17px;
-    margin-top:15px;
-    background:linear-gradient(135deg,#7c3aed,#2563eb);
-    color:#fff;
-    font-size:18px;
-    font-weight:bold;
-    cursor:pointer;
-    box-shadow:0 8px 20px rgba(37,99,235,.3);
-}
-
-.start-button:hover,
-.restart-button:hover{
-    transform:translateY(-2px);
-}
-
-/* CABECERA */
-
-.game-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-    margin-bottom:18px;
-}
-
-.title{
-    font-size:24px;
-    font-weight:bold;
+ margin:8px 0 3px;
+ font-size:clamp(34px,7vw,55px);
+ background:linear-gradient(
+  90deg,
+  #ff4d91,
+  #685ce8,
+  #00aeea
+ );
+ -webkit-background-clip:text;
+ color:transparent;
 }
 
 .subtitle{
-    color:#64748b;
-    font-size:13px;
-    margin-top:3px;
+ margin-top:5px;
+ font-size:17px;
 }
 
-.score-box{
-    background:#eef2ff;
-    color:#4338ca;
-    border-radius:14px;
-    padding:10px 14px;
-    font-weight:bold;
-    white-space:nowrap;
+.stats{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:10px;
+ margin:20px 0;
 }
 
-/* ESTADO */
-
-.status{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:10px;
-    margin-bottom:18px;
+.stat{
+ padding:10px;
+ border-radius:18px;
+ text-align:center;
+ font-weight:bold;
 }
 
-.status-item{
-    background:#f8fafc;
-    border-radius:14px;
-    padding:11px;
-    text-align:center;
-    font-size:13px;
+.stat b{
+ display:block;
+ font-size:25px;
+ margin-top:3px;
 }
 
-.status-value{
-    display:block;
-    font-size:19px;
-    font-weight:bold;
-    margin-top:4px;
+.points{
+ background:#fff0a8;
+}
+
+.time{
+ background:#c7f3ff;
 }
 
 .lives{
-    color:#dc2626;
+ background:#ffd1e1;
 }
-
-.combo{
-    color:#ea580c;
-}
-
-.timer{
-    color:#2563eb;
-}
-
-.timer.danger{
-    color:#dc2626;
-    animation:pulse .5s infinite alternate;
-}
-
-@keyframes pulse{
-    from{transform:scale(1)}
-    to{transform:scale(1.08)}
-}
-
-/* PROGRESO */
-
-.progress-area{
-    margin-bottom:18px;
-}
-
-.progress-info{
-    display:flex;
-    justify-content:space-between;
-    font-size:13px;
-    font-weight:bold;
-    margin-bottom:7px;
-}
-
-.progress-bar{
-    width:100%;
-    height:9px;
-    background:#e2e8f0;
-    border-radius:20px;
-    overflow:hidden;
-}
-
-.progress{
-    height:100%;
-    width:0;
-    background:linear-gradient(90deg,#7c3aed,#06b6d4);
-    transition:width .3s;
-}
-
-/* PREGUNTA */
 
 .level{
-    display:inline-block;
-    padding:7px 13px;
-    border-radius:30px;
-    color:#fff;
-    font-size:12px;
-    font-weight:bold;
-    margin-bottom:13px;
+ background:#d8ffd2;
 }
 
-.level1{
-    background:linear-gradient(135deg,#16a34a,#22c55e);
+.game{
+ display:grid;
+ grid-template-columns:minmax(0,1fr) 280px;
+ gap:22px;
 }
 
-.level2{
-    background:linear-gradient(135deg,#ea580c,#f97316);
+.board{
+ background:#6960dc;
+ padding:7px;
+ border-radius:20px;
 }
 
-.level3{
-    background:linear-gradient(135deg,#7c3aed,#c026d3);
+#grid{
+ display:grid;
+ grid-template-columns:repeat(12,1fr);
+ gap:3px;
 }
 
-.question-box{
-    background:linear-gradient(135deg,#f8fafc,#eef2ff);
-    border-radius:20px;
-    padding:23px;
-    margin-bottom:17px;
-    border:1px solid #e2e8f0;
+.cell{
+ aspect-ratio:1;
+ background:white;
+ border-radius:6px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ font-weight:bold;
+ font-size:clamp(12px,3vw,22px);
+ cursor:pointer;
+ transition:.15s;
+ user-select:none;
 }
 
-.question{
-    font-size:22px;
-    font-weight:bold;
-    line-height:1.45;
+.cell:hover{
+ background:#fff0a6;
 }
 
-/* OPCIONES */
-
-.options{
-    display:grid;
-    gap:11px;
+.cell.selected{
+ background:#ffc94f;
+ transform:scale(1.05);
 }
 
-.option{
-    width:100%;
-    background:#fff;
-    color:#182033;
-    border:2px solid #e2e8f0;
-    border-radius:15px;
-    padding:15px;
-    text-align:left;
-    font-size:16px;
-    cursor:pointer;
-    transition:.2s;
+.cell.found{
+ background:#54d5a3;
+ color:white;
 }
 
-.option:hover:not(:disabled){
-    border-color:#6366f1;
-    background:#eef2ff;
-    transform:translateX(4px);
+.panel{
+ background:#f4f3ff;
+ border-radius:22px;
+ padding:18px;
 }
 
-.option.correct{
-    background:#dcfce7;
-    border-color:#16a34a;
-    color:#166534;
+.panel h2{
+ margin-top:0;
+ color:#5f55d6;
 }
 
-.option.incorrect{
-    background:#fee2e2;
-    border-color:#dc2626;
-    color:#991b1b;
+.levelTitle{
+ background:#6960dc;
+ color:white;
+ padding:10px;
+ border-radius:15px;
+ text-align:center;
+ font-weight:bold;
+ margin-bottom:12px;
 }
 
-.option:disabled{
-    cursor:default;
+.words{
+ display:flex;
+ flex-wrap:wrap;
+ gap:7px;
 }
 
-/* EXPLICACIÓN */
-
-.explanation{
-    display:none;
-    margin-top:17px;
-    padding:17px;
-    border-radius:15px;
-    background:#ecfeff;
-    border-left:5px solid #0891b2;
-    color:#164e63;
-    line-height:1.55;
+.word{
+ background:white;
+ padding:6px 9px;
+ border-radius:13px;
+ font-size:13px;
+ font-weight:bold;
+ box-shadow:0 2px 5px #bbb;
 }
 
-.explanation.show{
-    display:block;
+.word.found{
+ background:#54d5a3;
+ color:white;
+ text-decoration:line-through;
 }
 
-/* BOTÓN */
-
-.next{
-    width:100%;
-    display:none;
-    border:0;
-    border-radius:15px;
-    padding:15px;
-    margin-top:16px;
-    background:#172554;
-    color:white;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
+.clues{
+ margin-top:15px;
+ background:#fff4c4;
+ padding:12px;
+ border-radius:15px;
+ font-size:14px;
 }
 
-.next.show{
-    display:block;
+button{
+ width:100%;
+ border:0;
+ padding:13px;
+ margin-top:15px;
+ border-radius:18px;
+ background:linear-gradient(
+  90deg,
+  #ff579b,
+  #665de7
+ );
+ color:white;
+ font-size:17px;
+ font-weight:bold;
+ cursor:pointer;
 }
 
-/* FINAL */
-
-.final{
-    text-align:center;
+button:hover{
+ opacity:.9;
 }
 
-.trophy{
-    font-size:75px;
+#message{
+ text-align:center;
+ margin-top:15px;
+ padding:12px;
+ border-radius:15px;
+ background:#e4ffec;
+ font-weight:bold;
+ display:none;
 }
 
-.final h2{
-    font-size:30px;
-    margin:12px 0;
+#final{
+ position:fixed;
+ inset:0;
+ background:#302b64dd;
+ display:none;
+ align-items:center;
+ justify-content:center;
+ padding:20px;
+ z-index:20;
 }
 
-.final-score{
-    font-size:60px;
-    font-weight:bold;
-    color:#4f46e5;
-    margin:20px 0;
+.finalBox{
+ background:white;
+ max-width:450px;
+ width:100%;
+ padding:30px;
+ border-radius:30px;
+ text-align:center;
+ box-shadow:0 20px 60px #0005;
 }
 
-.final p{
-    color:#64748b;
-    line-height:1.6;
-    margin-bottom:10px;
+.finalEmoji{
+ font-size:65px;
 }
 
-.medal{
-    font-size:45px;
-    margin:10px;
+.finalBox h2{
+ color:#6258d7;
+ font-size:34px;
+ margin:5px;
 }
 
-@media(max-width:600px){
-
-    body{
-        padding:8px;
-    }
-
-    .game{
-        padding:19px;
-        border-radius:21px;
-    }
-
-    h1{
-        font-size:28px;
-    }
-
-    .game-header{
-        align-items:flex-start;
-    }
-
-    .title{
-        font-size:20px;
-    }
-
-    .score-box{
-        font-size:13px;
-        padding:8px;
-    }
-
-    .status{
-        gap:6px;
-    }
-
-    .status-item{
-        padding:9px 4px;
-        font-size:11px;
-    }
-
-    .status-value{
-        font-size:17px;
-    }
-
-    .question{
-        font-size:19px;
-    }
-
-    .option{
-        font-size:15px;
-    }
+.finalScore{
+ font-size:21px;
+ line-height:1.6;
 }
+
+.secret{
+ background:#fff0a8;
+ padding:15px;
+ border-radius:18px;
+ margin-top:15px;
+ font-size:20px;
+ font-weight:bold;
+}
+
+@media(max-width:700px){
+
+ .container{
+  padding:13px;
+ }
+
+ .game{
+  display:block;
+ }
+
+ .panel{
+  margin-top:18px;
+ }
+
+ .stats{
+  grid-template-columns:repeat(2,1fr);
+ }
+
+ .cell{
+  font-size:clamp(11px,4vw,18px);
+ }
+
+}
+
 </style>
 </head>
 
+
 <body>
+
+
+<div class="container">
+
+
+<header>
+
+ <div class="badge">
+  🎮 DESAFÍO ESCOLAR
+ </div>
+
+ <h1>
+  🌈 MISIÓN 6.º
+ </h1>
+
+ <div class="subtitle">
+  ¿Podés superar los 3 niveles?
+ </div>
+
+</header>
+
+
+<div class="stats">
+
+ <div class="stat points">
+  ⭐ PUNTOS
+  <b id="points">0</b>
+ </div>
+
+ <div class="stat time">
+  ⏱️ TIEMPO
+  <b id="time">120</b>
+ </div>
+
+ <div class="stat lives">
+  ❤️ VIDAS
+  <b id="lives">3</b>
+ </div>
+
+ <div class="stat level">
+  🚀 NIVEL
+  <b id="level">1</b>
+ </div>
+
+</div>
+
 
 <div class="game">
 
-<!-- =========================
-     PANTALLA INICIAL
-========================= -->
 
-<div id="startScreen" class="start">
+<div>
 
-    <div class="logo">🧪</div>
+ <div class="board">
+  <div id="grid"></div>
+ </div>
 
-    <h1>Laboratorio Científico</h1>
-
-    <p>
-        ¿Tenés lo necesario para convertirte
-        en una mente científica?
-    </p>
-
-    <h2>🔬 El desafío</h2>
-
-    <p>
-        Vas a atravesar <strong>3 niveles</strong>.
-        Las preguntas serán cada vez más difíciles
-        y tendrás tiempo limitado para responder.
-    </p>
-
-    <p>
-        ⚡ Cuanto más rápido respondas correctamente,
-        más puntos podés conseguir.
-    </p>
-
-    <p>
-        ❤️ Tenés 3 vidas.
-    </p>
-
-    <button
-        class="start-button"
-        onclick="startGame()">
-
-        🚀 COMENZAR EXPERIMENTO
-
-    </button>
+ <div id="message"></div>
 
 </div>
 
 
-<!-- =========================
-     JUEGO
-========================= -->
+<div class="panel">
 
-<div id="gameScreen" class="hidden">
 
-    <div class="game-header">
+ <div class="levelTitle" id="levelTitle">
+  🔎 NIVEL 1
+ </div>
 
-        <div>
 
-            <div class="title">
-                🧪 Laboratorio Científico
-            </div>
+ <h2>
+  🎯 Encontrá:
+ </h2>
 
-            <div class="subtitle">
-                Desafío de conocimientos
-            </div>
 
-        </div>
+ <div class="words" id="words"></div>
 
-        <div class="score-box">
 
-            ⭐ <span id="score">0</span>
+ <div class="clues">
 
-        </div>
+  💡 <b>Cómo jugar:</b>
 
-    </div>
+  <br><br>
 
+  Tocá la primera letra y después la última letra de una palabra.
 
-    <div class="status">
+  <br><br>
 
-        <div class="status-item">
+  Puede estar horizontal, vertical o diagonal.
 
-            ❤️ Vidas
+ </div>
 
-            <span
-                id="lives"
-                class="status-value lives">
 
-                ❤️❤️❤️
+ <button onclick="reiniciar()">
+  🔄 NUEVO JUEGO
+ </button>
 
-            </span>
-
-        </div>
-
-
-        <div class="status-item">
-
-            🔥 Combo
-
-            <span
-                id="combo"
-                class="status-value combo">
-
-                x0
-
-            </span>
-
-        </div>
-
-
-        <div class="status-item">
-
-            ⏱️ Tiempo
-
-            <span
-                id="timer"
-                class="status-value timer">
-
-                15
-
-            </span>
-
-        </div>
-
-    </div>
-
-
-    <div class="progress-area">
-
-        <div class="progress-info">
-
-            <span id="questionNumber">
-                Pregunta 1 de 9
-            </span>
-
-            <span id="levelText">
-                Nivel 1
-            </span>
-
-        </div>
-
-        <div class="progress-bar">
-
-            <div
-                id="progress"
-                class="progress">
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <div class="question-box">
-
-        <div
-            id="levelBadge"
-            class="level level1">
-
-            NIVEL 1
-
-        </div>
-
-        <div
-            id="question"
-            class="question">
-        </div>
-
-    </div>
-
-
-    <div
-        id="options"
-        class="options">
-    </div>
-
-
-    <div
-        id="explanation"
-        class="explanation">
-    </div>
-
-
-    <button
-        id="nextButton"
-        class="next"
-        onclick="nextQuestion()">
-
-        Siguiente desafío →
-
-    </button>
-
-</div>
-
-
-<!-- =========================
-     FINAL
-========================= -->
-
-<div id="finalScreen" class="final hidden">
-
-    <div class="trophy">
-        🏆
-    </div>
-
-    <h2>
-        ¡Experimento terminado!
-    </h2>
-
-    <div
-        id="medal"
-        class="medal">
-    </div>
-
-    <div
-        id="finalScore"
-        class="final-score">
-
-        0
-
-    </div>
-
-    <p
-        id="finalMessage">
-    </p>
-
-    <p>
-        La ciencia no se trata solamente
-        de acertar: también se trata de
-        observar, preguntar y aprender.
-    </p>
-
-    <button
-        class="restart-button"
-        onclick="restartGame()">
-
-        🔄 VOLVER A JUGAR
-
-    </button>
 
 </div>
 
 </div>
+
+</div>
+
+
+
+<div id="final">
+
+
+<div class="finalBox">
+
+
+ <div class="finalEmoji" id="finalEmoji">
+  🏆
+ </div>
+
+
+ <h2 id="finalTitle">
+  ¡MISIÓN CUMPLIDA!
+ </h2>
+
+
+ <div class="finalScore" id="finalScore"></div>
+
+
+ <div class="secret" id="secret"></div>
+
+
+ <button onclick="reiniciar()">
+  🎮 JUGAR DE NUEVO
+ </button>
+
+
+</div>
+
+</div>
+
 
 
 <script>
 
-/* =========================================
-   PREGUNTAS
-========================================= */
 
-const questions = [
+/* =====================================================
+   CONFIGURACIÓN
+===================================================== */
 
-/* NIVEL 1 */
+const TAMANO = 12;
 
-{
-    level:1,
-    time:15,
 
-    question:
-    "¿Cuál de estos ejemplos representa un cambio físico?",
+/* =====================================================
+   PALABRAS DE LOS 3 NIVELES
+===================================================== */
 
-    options:[
-        "🔥 Quemar un papel",
-        "🧊 Derretir un cubo de hielo",
-        "🔩 Oxidar un clavo"
-    ],
+/*
+   IMPORTANTE:
+   Ninguna palabra se repite en todo el juego.
+*/
 
-    correct:1,
+const niveles = [
 
-    explanation:
-    "🧊 Al derretirse, el hielo sigue siendo agua. Cambia su estado físico, pero no aparece una sustancia nueva."
-},
+
+/* =====================================================
+   NIVEL 1
+===================================================== */
 
 {
-    level:1,
-    time:15,
+ titulo:"🔎 NIVEL 1 — CALENTAMIENTO",
 
-    question:
-    "¿Qué ocurre cuando mezclamos agua y sal?",
+ palabras:[
 
-    options:[
-        "💥 Se produce una explosión",
-        "🧂 La sal se disuelve en el agua",
-        "🔥 La sal se transforma en vapor"
-    ],
+  {
+   palabra:"PLANETA",
+   filaInicial:9,
+   columnaInicial:1,
+   filaFinal:3,
+   columnaFinal:1
+  },
 
-    correct:1,
+  {
+   palabra:"ESCUELA",
+   filaInicial:3,
+   columnaInicial:6,
+   filaFinal:9,
+   columnaFinal:0
+  },
 
-    explanation:
-    "🧂 La sal se disuelve. Sus partículas quedan distribuidas en el agua y forman una mezcla homogénea."
-},
+  {
+   palabra:"AMISTAD",
+   filaInicial:1,
+   columnaInicial:2,
+   filaFinal:7,
+   columnaFinal:8
+  },
 
-{
-    level:1,
-    time:15,
+  {
+   palabra:"CIENCIA",
+   filaInicial:9,
+   columnaInicial:8,
+   filaFinal:3,
+   columnaFinal:2
+  }
 
-    question:
-    "¿Cuál de estos estados de la materia tiene volumen definido pero no forma propia?",
+ ]
 
-    options:[
-        "💧 Líquido",
-        "💨 Gas",
-        "🧊 Sólido"
-    ],
-
-    correct:0,
-
-    explanation:
-    "💧 Los líquidos tienen un volumen definido, pero adoptan la forma del recipiente que los contiene."
-},
-
-
-/* NIVEL 2 */
-
-{
-    level:2,
-    time:12,
-
-    question:
-    "¿Qué sucede cuando mezclamos vinagre y bicarbonato?",
-
-    options:[
-        "🫧 Se produce dióxido de carbono y aparecen burbujas",
-        "🧊 El líquido se congela inmediatamente",
-        "💧 El bicarbonato desaparece sin reaccionar"
-    ],
-
-    correct:0,
-
-    explanation:
-    "🫧 El ácido del vinagre reacciona con el bicarbonato y se produce dióxido de carbono. Las burbujas que observamos son ese gas."
-},
-
-{
-    level:2,
-    time:12,
-
-    question:
-    "¿Por qué el aceite queda arriba del agua?",
-
-    options:[
-        "🫗 Porque tiene menor densidad y no se mezcla con el agua",
-        "💧 Porque el agua siempre se va al fondo",
-        "🔥 Porque el aceite es más caliente"
-    ],
-
-    correct:0,
-
-    explanation:
-    "🫗 El aceite tiene menor densidad que el agua y además no se mezcla con ella. Por eso forma una capa superior."
-},
-
-{
-    level:2,
-    time:12,
-
-    question:
-    "¿Cuál de estas situaciones indica una posible reacción química?",
-
-    options:[
-        "🧊 Un hielo se derrite",
-        "🫧 Aparecen burbujas y se libera gas al mezclar sustancias",
-        "💧 El agua cambia de recipiente"
-    ],
-
-    correct:1,
-
-    explanation:
-    "🫧 La aparición de un gas puede ser una señal de que se está formando una sustancia nueva, característica de una reacción química."
 },
 
 
-/* NIVEL 3 */
+/* =====================================================
+   NIVEL 2
+===================================================== */
 
 {
-    level:3,
-    time:10,
+ titulo:"🔥 NIVEL 2 — MÁS DIFÍCIL",
 
-    question:
-    "Si queremos comprobar si una planta crece más con luz, ¿qué debemos hacer?",
+ palabras:[
 
-    options:[
-        "🔮 Adivinar el resultado",
-        "🔬 Comparar plantas manteniendo controladas las demás condiciones",
-        "🌱 Elegir solamente la planta que creció más"
-    ],
+  {
+   palabra:"NATURALEZA",
+   filaInicial:0,
+   columnaInicial:3,
+   filaFinal:9,
+   columnaFinal:3
+  },
 
-    correct:1,
+  {
+   palabra:"AVENTURA",
+   filaInicial:5,
+   columnaInicial:10,
+   filaFinal:5,
+   columnaFinal:3
+  },
 
-    explanation:
-    "🔬 El método científico requiere comparar condiciones y controlar variables para obtener resultados confiables."
+  {
+   palabra:"ANIMALES",
+   filaInicial:9,
+   columnaInicial:10,
+   filaFinal:2,
+   columnaFinal:10
+  },
+
+  {
+   palabra:"EXPLORAR",
+   filaInicial:3,
+   columnaInicial:0,
+   filaFinal:10,
+   columnaFinal:7
+  },
+
+  {
+   palabra:"LECTURA",
+   filaInicial:8,
+   columnaInicial:6,
+   filaFinal:2,
+   columnaFinal:6
+  },
+
+  {
+   palabra:"MUSICA",
+   filaInicial:6,
+   columnaInicial:10,
+   filaFinal:6,
+   columnaFinal:5
+  }
+
+ ]
+
 },
 
-{
-    level:3,
-    time:10,
 
-    question:
-    "Si una sustancia tiene pH menor que 7, ¿cómo se clasifica?",
-
-    options:[
-        "🧪 Ácida",
-        "💧 Neutra",
-        "🧼 Básica"
-    ],
-
-    correct:0,
-
-    explanation:
-    "🧪 En la escala de pH, los valores menores que 7 corresponden a sustancias ácidas. Un pH de 7 es neutro."
-},
+/* =====================================================
+   NIVEL 3
+===================================================== */
 
 {
-    level:3,
-    time:10,
+ titulo:"😈 NIVEL 3 — DESAFÍO FINAL",
 
-    question:
-    "¿Qué variable debemos modificar para investigar si la temperatura afecta la velocidad de una reacción?",
+ palabras:[
 
-    options:[
-        "🌡️ La temperatura",
-        "🎲 Todas las variables al mismo tiempo",
-        "📊 Ninguna variable"
-    ],
+  {
+   palabra:"MISTERIO",
+   filaInicial:7,
+   columnaInicial:10,
+   filaFinal:0,
+   columnaFinal:3
+  },
 
-    correct:0,
+  {
+   palabra:"LIBERTAD",
+   filaInicial:3,
+   columnaInicial:3,
+   filaFinal:3,
+   columnaFinal:10
+  },
 
-    explanation:
-    "🌡️ La variable que modificamos intencionalmente se llama variable independiente. En este experimento sería la temperatura."
+  {
+   palabra:"IMAGINAR",
+   filaInicial:1,
+   columnaInicial:11,
+   filaFinal:8,
+   columnaFinal:4
+  },
+
+  {
+   palabra:"APRENDER",
+   filaInicial:8,
+   columnaInicial:11,
+   filaFinal:8,
+   columnaFinal:4
+  },
+
+  {
+   palabra:"FAMILIA",
+   filaInicial:6,
+   columnaInicial:4,
+   filaFinal:0,
+   columnaFinal:4
+  },
+
+  {
+   palabra:"DESAFIO",
+   filaInicial:2,
+   columnaInicial:7,
+   filaFinal:8,
+   columnaFinal:1
+  },
+
+  {
+   palabra:"FUTURO",
+   filaInicial:3,
+   columnaInicial:1,
+   filaFinal:8,
+   columnaFinal:1
+  },
+
+  {
+   palabra:"AMIGOS",
+   filaInicial:1,
+   columnaInicial:2,
+   filaFinal:1,
+   columnaFinal:7
+  },
+
+  {
+   palabra:"EQUIPO",
+   filaInicial:4,
+   columnaInicial:2,
+   filaFinal:9,
+   columnaFinal:2
+  },
+
+  {
+   palabra:"JUEGO",
+   filaInicial:5,
+   columnaInicial:6,
+   filaFinal:1,
+   columnaFinal:6
+  }
+
+ ]
+
 }
 
 ];
 
 
-/* =========================================
+/* =====================================================
+   LETRAS
+===================================================== */
+
+const letras =
+ "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+
+/* =====================================================
    VARIABLES
-========================================= */
+===================================================== */
 
-let currentQuestion = 0;
+let tablero = [];
 
-let score = 0;
+let nivelActual = 0;
 
-let lives = 3;
+let palabrasEncontradas = [];
 
-let combo = 0;
+let primeraCelda = null;
 
-let timer = 0;
+let puntos = 0;
 
-let timerInterval = null;
+let vidas = 3;
 
-let answered = false;
+let tiempo = 120;
 
+let jugando = true;
 
-/* =========================================
-   INICIAR
-========================================= */
-
-function startGame(){
-
-    currentQuestion = 0;
-
-    score = 0;
-
-    lives = 3;
-
-    combo = 0;
-
-    answered = false;
-
-    document
-    .getElementById("startScreen")
-    .classList.add("hidden");
-
-    document
-    .getElementById("finalScreen")
-    .classList.add("hidden");
-
-    document
-    .getElementById("gameScreen")
-    .classList.remove("hidden");
-
-    updateLives();
-
-    showQuestion();
-}
+let temporizador;
 
 
-/* =========================================
-   MOSTRAR PREGUNTA
-========================================= */
+/* =====================================================
+   CREAR TABLERO
+===================================================== */
 
-function showQuestion(){
+function crearTablero(){
 
-    clearInterval(timerInterval);
-
-    answered = false;
-
-    const q =
-    questions[currentQuestion];
-
-    document
-    .getElementById("score")
-    .textContent = score;
-
-    document
-    .getElementById("combo")
-    .textContent = "x" + combo;
-
-    document
-    .getElementById("questionNumber")
-    .textContent =
-    "Pregunta " +
-    (currentQuestion + 1) +
-    " de " +
-    questions.length;
-
-    document
-    .getElementById("levelText")
-    .textContent =
-    "Nivel " + q.level;
-
-    document
-    .getElementById("progress")
-    .style.width =
-    ((currentQuestion) /
-    questions.length * 100) + "%";
+ tablero =
+  Array.from(
+   {length:TAMANO},
+   () => Array(TAMANO).fill("")
+  );
 
 
-    const badge =
-    document.getElementById("levelBadge");
-
-    badge.textContent =
-    "NIVEL " + q.level;
-
-    badge.className =
-    "level level" + q.level;
+ const palabras =
+  niveles[nivelActual].palabras;
 
 
-    document
-    .getElementById("question")
-    .textContent =
-    q.question;
+ /*
+    COLOCAMOS LAS PALABRAS
+ */
+
+ palabras.forEach(objeto => {
+
+  const palabra =
+   objeto.palabra;
 
 
-    const options =
-    document.getElementById("options");
-
-    options.innerHTML = "";
+  const filaInicial =
+   objeto.filaInicial;
 
 
-    document
-    .getElementById("explanation")
-    .classList.remove("show");
+  const columnaInicial =
+   objeto.columnaInicial;
 
 
-    document
-    .getElementById("nextButton")
-    .classList.remove("show");
+  const filaFinal =
+   objeto.filaFinal;
 
 
-    q.options.forEach(
-        function(option,index){
+  const columnaFinal =
+   objeto.columnaFinal;
 
-            const button =
-            document.createElement("button");
 
-            button.className =
-            "option";
+  const pasos =
+   Math.max(
+    Math.abs(
+     filaFinal-filaInicial
+    ),
+    Math.abs(
+     columnaFinal-columnaInicial
+    )
+   );
 
-            button.textContent =
-            option;
 
-            button.onclick =
-            function(){
+  const direccionFila =
+   filaFinal === filaInicial
+    ? 0
+    : (filaFinal-filaInicial)/pasos;
 
-                answerQuestion(
-                    index,
-                    button
-                );
 
-            };
+  const direccionColumna =
+   columnaFinal === columnaInicial
+    ? 0
+    : (columnaFinal-columnaInicial)/pasos;
 
-            options.appendChild(button);
 
-        }
+  for(
+   let i=0;
+   i<palabra.length;
+   i++
+  ){
+
+   const fila =
+    filaInicial +
+    direccionFila*i;
+
+
+   const columna =
+    columnaInicial +
+    direccionColumna*i;
+
+
+   /*
+      Si hay una letra,
+      debe coincidir.
+   */
+
+   if(
+    tablero[fila][columna] &&
+    tablero[fila][columna] !== palabra[i]
+   ){
+
+    console.error(
+     "ERROR DE CRUCE:",
+     palabra
     );
 
+   }
 
-    startTimer(q.time);
+
+   tablero[fila][columna] =
+    palabra[i];
+
+  }
+
+ });
+
+
+ /*
+    COMPLETAMOS LOS ESPACIOS
+ */
+
+ for(
+  let fila=0;
+  fila<TAMANO;
+  fila++
+ ){
+
+  for(
+   let columna=0;
+   columna<TAMANO;
+   columna++
+  ){
+
+   if(
+    tablero[fila][columna] === ""
+   ){
+
+    tablero[fila][columna] =
+     letras[
+      Math.floor(
+       Math.random()*letras.length
+      )
+     ];
+
+   }
+
+  }
+
+ }
+
 }
 
 
-/* =========================================
+/* =====================================================
+   DIBUJAR TABLERO
+===================================================== */
+
+function dibujarTablero(){
+
+ const cuadricula =
+  document.getElementById("grid");
+
+
+ cuadricula.innerHTML = "";
+
+
+ for(
+  let fila=0;
+  fila<TAMANO;
+  fila++
+ ){
+
+  for(
+   let columna=0;
+   columna<TAMANO;
+   columna++
+  ){
+
+   const celda =
+    document.createElement("div");
+
+
+   celda.className =
+    "cell";
+
+
+   celda.textContent =
+    tablero[fila][columna];
+
+
+   celda.dataset.fila =
+    fila;
+
+
+   celda.dataset.columna =
+    columna;
+
+
+   celda.onclick =
+    function(){
+
+     seleccionarCelda(celda);
+
+    };
+
+
+   cuadricula.appendChild(celda);
+
+  }
+
+ }
+
+}
+
+
+/* =====================================================
+   MOSTRAR PALABRAS
+===================================================== */
+
+function dibujarPalabras(){
+
+ const contenedor =
+  document.getElementById("words");
+
+
+ contenedor.innerHTML = "";
+
+
+ niveles[nivelActual].palabras
+  .forEach(objeto => {
+
+   const palabra =
+    document.createElement("div");
+
+
+   palabra.className =
+    "word";
+
+
+   palabra.id =
+    "word-"+objeto.palabra;
+
+
+   palabra.textContent =
+    objeto.palabra;
+
+
+   contenedor.appendChild(
+    palabra
+   );
+
+  });
+
+}
+
+
+/* =====================================================
+   SELECCIONAR CELDA
+===================================================== */
+
+function seleccionarCelda(celda){
+
+ if(!jugando)
+  return;
+
+
+ const fila =
+  Number(celda.dataset.fila);
+
+
+ const columna =
+  Number(celda.dataset.columna);
+
+
+ /*
+    PRIMERA LETRA
+ */
+
+ if(!primeraCelda){
+
+  primeraCelda = {
+   fila:fila,
+   columna:columna
+  };
+
+
+  celda.classList.add(
+   "selected"
+  );
+
+
+  return;
+
+ }
+
+
+ /*
+    SEGUNDA LETRA
+ */
+
+ const segundaCelda = {
+
+  fila:fila,
+
+  columna:columna
+
+ };
+
+
+ const palabra =
+  obtenerPalabra(
+   primeraCelda,
+   segundaCelda
+  );
+
+
+ limpiarSeleccion();
+
+
+ /*
+    NO ES UNA PALABRA
+ */
+
+ if(!palabra){
+
+  vidas--;
+
+
+  document.getElementById("lives")
+   .textContent =
+   vidas;
+
+
+  mostrarMensaje(
+   "❌ Esa combinación no forma una palabra."
+  );
+
+
+  primeraCelda = null;
+
+
+  if(vidas<=0){
+
+   finalizar(false);
+
+  }
+
+
+  return;
+
+ }
+
+
+ /*
+    YA ENCONTRADA
+ */
+
+ if(
+  palabrasEncontradas.includes(
+   palabra
+  )
+ ){
+
+  mostrarMensaje(
+   "👀 Esa palabra ya estaba encontrada."
+  );
+
+
+  primeraCelda = null;
+
+  return;
+
+ }
+
+
+ /*
+    PALABRA ENCONTRADA
+ */
+
+ palabrasEncontradas.push(
+  palabra
+ );
+
+
+ marcarPalabra(
+  primeraCelda,
+  segundaCelda
+ );
+
+
+ const palabraVisual =
+  document.getElementById(
+   "word-"+palabra
+  );
+
+
+ if(palabraVisual){
+
+  palabraVisual.classList.add(
+   "found"
+  );
+
+ }
+
+
+ puntos += 150;
+
+
+ document.getElementById("points")
+  .textContent =
+  puntos;
+
+
+ mostrarMensaje(
+  "🎉 ¡Encontraste "+palabra+"!"
+ );
+
+
+ primeraCelda = null;
+
+
+ /*
+    CAMBIO DE NIVEL
+ */
+
+ if(
+  palabrasEncontradas.length ===
+  niveles[nivelActual].palabras.length
+ ){
+
+  if(
+   nivelActual <
+   niveles.length-1
+  ){
+
+   setTimeout(
+    cambiarNivel,
+    800
+   );
+
+  }else{
+
+   setTimeout(
+    function(){
+
+     finalizar(true);
+
+    },
+    800
+   );
+
+  }
+
+ }
+
+}
+
+
+/* =====================================================
+   CAMBIAR NIVEL
+===================================================== */
+
+function cambiarNivel(){
+
+ nivelActual++;
+
+ palabrasEncontradas = [];
+
+ primeraCelda = null;
+
+
+ document.getElementById("level")
+  .textContent =
+  nivelActual+1;
+
+
+ document.getElementById("levelTitle")
+  .textContent =
+  niveles[nivelActual].titulo;
+
+
+ crearTablero();
+
+ dibujarTablero();
+
+ dibujarPalabras();
+
+
+ mostrarMensaje(
+  "🚀 ¡NIVEL SUPERADO!"
+ );
+
+}
+
+
+/* =====================================================
+   OBTENER PALABRA
+===================================================== */
+
+function obtenerPalabra(a,b){
+
+ const diferenciaFila =
+  b.fila-a.fila;
+
+
+ const diferenciaColumna =
+  b.columna-a.columna;
+
+
+ /*
+    SOLO:
+
+    HORIZONTAL
+    VERTICAL
+    DIAGONAL
+ */
+
+ if(
+  diferenciaFila !== 0 &&
+  diferenciaColumna !== 0 &&
+  Math.abs(diferenciaFila) !==
+   Math.abs(diferenciaColumna)
+ ){
+
+  return null;
+
+ }
+
+
+ const pasos =
+  Math.max(
+   Math.abs(diferenciaFila),
+   Math.abs(diferenciaColumna)
+  );
+
+
+ if(pasos<1){
+
+  return null;
+
+ }
+
+
+ const direccionFila =
+  diferenciaFila === 0
+   ? 0
+   : diferenciaFila/pasos;
+
+
+ const direccionColumna =
+  diferenciaColumna === 0
+   ? 0
+   : diferenciaColumna/pasos;
+
+
+ let texto = "";
+
+
+ for(
+  let i=0;
+  i<=pasos;
+  i++
+ ){
+
+  const fila =
+   a.fila +
+   direccionFila*i;
+
+
+  const columna =
+   a.columna +
+   direccionColumna*i;
+
+
+  texto +=
+   tablero[fila][columna];
+
+ }
+
+
+ /*
+    COMPROBAMOS CONTRA LAS PALABRAS
+ */
+
+ for(
+  const objeto
+  of niveles[nivelActual].palabras
+ ){
+
+  const palabra =
+   objeto.palabra;
+
+
+  /*
+     Dirección normal
+  */
+
+  if(
+   texto === palabra
+  ){
+
+   return palabra;
+
+  }
+
+
+  /*
+     Dirección inversa
+  */
+
+  if(
+   texto
+    .split("")
+    .reverse()
+    .join("") === palabra
+  ){
+
+   return palabra;
+
+  }
+
+ }
+
+
+ return null;
+
+}
+
+
+/* =====================================================
+   MARCAR PALABRA
+===================================================== */
+
+function marcarPalabra(a,b){
+
+ const diferenciaFila =
+  b.fila-a.fila;
+
+
+ const diferenciaColumna =
+  b.columna-a.columna;
+
+
+ const pasos =
+  Math.max(
+   Math.abs(diferenciaFila),
+   Math.abs(diferenciaColumna)
+  );
+
+
+ const direccionFila =
+  diferenciaFila === 0
+   ? 0
+   : diferenciaFila/pasos;
+
+
+ const direccionColumna =
+  diferenciaColumna === 0
+   ? 0
+   : diferenciaColumna/pasos;
+
+
+ for(
+  let i=0;
+  i<=pasos;
+  i++
+ ){
+
+  const fila =
+   a.fila +
+   direccionFila*i;
+
+
+  const columna =
+   a.columna +
+   direccionColumna*i;
+
+
+  const celda =
+   document.querySelector(
+    '.cell[data-fila="'+fila+'"][data-columna="'+columna+'"]'
+   );
+
+
+  if(celda){
+
+   celda.classList.add(
+    "found"
+   );
+
+  }
+
+ }
+
+}
+
+
+/* =====================================================
+   LIMPIAR SELECCIÓN
+===================================================== */
+
+function limpiarSeleccion(){
+
+ document
+  .querySelectorAll(".cell.selected")
+  .forEach(
+   function(celda){
+
+    celda.classList.remove(
+     "selected"
+    );
+
+   }
+  );
+
+}
+
+
+/* =====================================================
+   MENSAJES
+===================================================== */
+
+function mostrarMensaje(texto){
+
+ const caja =
+  document.getElementById(
+   "message"
+  );
+
+
+ caja.innerHTML =
+  texto;
+
+
+ caja.style.display =
+  "block";
+
+
+ setTimeout(
+  function(){
+
+   caja.style.display =
+    "none";
+
+  },
+  1500
+ );
+
+}
+
+
+/* =====================================================
    CRONÓMETRO
-========================================= */
+===================================================== */
 
-function startTimer(seconds){
+function iniciarTemporizador(){
 
-    clearInterval(timerInterval);
-
-    timer = seconds;
-
-    updateTimer();
-
-    timerInterval =
-    setInterval(
-        function(){
-
-            timer--;
-
-            updateTimer();
-
-            if(timer <= 0){
-
-                clearInterval(
-                    timerInterval
-                );
-
-                timeOut();
-
-            }
-
-        },
-        1000
-    );
-}
+ clearInterval(
+  temporizador
+ );
 
 
-function updateTimer(){
+ temporizador =
+  setInterval(
+   function(){
 
-    const element =
-    document.getElementById("timer");
+    if(!jugando)
+     return;
 
-    element.textContent =
-    timer;
 
-    if(timer <= 5){
+    tiempo--;
 
-        element.classList.add("danger");
 
-    }else{
+    document.getElementById("time")
+     .textContent =
+     tiempo;
 
-        element.classList.remove("danger");
+
+    if(tiempo<=0){
+
+     finalizar(false);
 
     }
-}
 
-
-/* =========================================
-   TIEMPO AGOTADO
-========================================= */
-
-function timeOut(){
-
-    if(answered){
-        return;
-    }
-
-    answered = true;
-
-    lives--;
-
-    combo = 0;
-
-    updateLives();
-
-    const q =
-    questions[currentQuestion];
-
-    const buttons =
-    document.querySelectorAll(".option");
-
-    buttons.forEach(
-        function(button){
-
-            button.disabled = true;
-
-        }
-    );
-
-    buttons[q.correct]
-    .classList.add("correct");
-
-
-    showExplanation(
-        "⏰ ¡Se terminó el tiempo!",
-        q.explanation
-    );
-
-    document
-    .getElementById("nextButton")
-    .classList.add("show");
-
-
-    if(lives <= 0){
-
-        setTimeout(
-            function(){
-
-                showFinalScreen();
-
-            },
-            1500
-        );
-
-    }
-}
-
-
-/* =========================================
-   RESPUESTA
-========================================= */
-
-function answerQuestion(
-    selected,
-    selectedButton
-){
-
-    if(answered){
-        return;
-    }
-
-    answered = true;
-
-    clearInterval(timerInterval);
-
-    const q =
-    questions[currentQuestion];
-
-    const buttons =
-    document.querySelectorAll(".option");
-
-    buttons.forEach(
-        function(button){
-
-            button.disabled = true;
-
-        }
-    );
-
-
-    if(selected === q.correct){
-
-        selectedButton
-        .classList
-        .add("correct");
-
-
-        combo++;
-
-
-        /*
-        Puntos:
-        2 base
-        + segundos restantes
-        + bonus de combo
-        */
-
-        const points =
-        2 +
-        timer +
-        (combo * 2);
-
-        score += points;
-
-
-        showExplanation(
-            "✅ ¡Respuesta correcta! +" +
-            points +
-            " puntos",
-            q.explanation
-        );
-
-
-    }else{
-
-        selectedButton
-        .classList
-        .add("incorrect");
-
-
-        buttons[q.correct]
-        .classList
-        .add("correct");
-
-
-        lives--;
-
-        combo = 0;
-
-        updateLives();
-
-
-        showExplanation(
-            "❌ Respuesta incorrecta",
-            q.explanation
-        );
-
-    }
-
-
-    document
-    .getElementById("score")
-    .textContent = score;
-
-
-    document
-    .getElementById("combo")
-    .textContent =
-    "x" + combo;
-
-
-    document
-    .getElementById("nextButton")
-    .classList
-    .add("show");
-
-
-    if(lives <= 0){
-
-        document
-        .getElementById("nextButton")
-        .textContent =
-        "🏁 Ver resultado";
-
-    }
+   },
+   1000
+  );
 
 }
 
 
-/* =========================================
-   EXPLICACIÓN
-========================================= */
+/* =====================================================
+   FINALIZAR
+===================================================== */
 
-function showExplanation(
-    title,
-    text
-){
+function finalizar(gano){
 
-    const box =
-    document.getElementById(
-        "explanation"
-    );
-
-    box.innerHTML =
-    "<strong>" +
-    title +
-    "</strong><br><br>" +
-    text;
-
-    box.classList.add("show");
-}
+ jugando = false;
 
 
-/* =========================================
-   VIDAS
-========================================= */
-
-function updateLives(){
-
-    let hearts = "";
-
-    for(
-        let i = 0;
-        i < 3;
-        i++
-    ){
-
-        hearts +=
-        i < lives ? "❤️" : "🖤";
-
-    }
-
-    document
-    .getElementById("lives")
-    .textContent = hearts;
-}
+ clearInterval(
+  temporizador
+ );
 
 
-/* =========================================
-   SIGUIENTE
-========================================= */
-
-function nextQuestion(){
-
-    if(lives <= 0){
-
-        showFinalScreen();
-
-        return;
-    }
-
-    currentQuestion++;
+ document.getElementById("final")
+  .style.display =
+  "flex";
 
 
-    if(
-        currentQuestion >=
-        questions.length
-    ){
+ if(gano){
 
-        showFinalScreen();
-
-        return;
-    }
+  document.getElementById(
+   "finalEmoji"
+  ).textContent =
+   "🏆";
 
 
-    showQuestion();
-}
+  document.getElementById(
+   "finalTitle"
+  ).textContent =
+   "¡MISIÓN CUMPLIDA!";
 
 
-/* =========================================
-   RESULTADO
-========================================= */
-
-function showFinalScreen(){
-
-    clearInterval(timerInterval);
-
-    document
-    .getElementById("gameScreen")
-    .classList.add("hidden");
-
-    document
-    .getElementById("finalScreen")
-    .classList.remove("hidden");
+  document.getElementById(
+   "finalScore"
+  ).innerHTML =
+   "🎉 ¡Superaste los 3 niveles!<br><br>"+
+   "⭐ Puntaje final: <b>"+
+   puntos+
+   "</b><br>"+
+   "⏱️ Tiempo restante: <b>"+
+   tiempo+
+   " segundos</b>";
 
 
-    let medal = "";
-
-    let message = "";
-
-
-    if(score >= 90){
-
-        medal = "🥇";
-
-        message =
-        "¡Sos una verdadera mente científica!";
-
-    }
-
-    else if(score >= 60){
-
-        medal = "🥈";
-
-        message =
-        "¡Excelente trabajo! Tus conocimientos científicos son muy buenos.";
-
-    }
-
-    else if(score >= 30){
-
-        medal = "🥉";
-
-        message =
-        "¡Buen trabajo! Estás construyendo una gran base científica.";
-
-    }
-
-    else{
-
-        medal = "🔬";
-
-        message =
-        "¡Buen comienzo! La ciencia se aprende experimentando.";
-
-    }
+  document.getElementById(
+   "secret"
+  ).innerHTML =
+   "🔐 PALABRA SECRETA<br><br>"+
+   "🌟 ¡CAMPEÓN/A DEL DESAFÍO! 🌟";
 
 
-    document
-    .getElementById("medal")
-    .textContent = medal;
+ }else{
+
+  document.getElementById(
+   "finalEmoji"
+  ).textContent =
+   "😅";
 
 
-    document
-    .getElementById("finalScore")
-    .textContent =
-    score + " puntos";
+  document.getElementById(
+   "finalTitle"
+  ).textContent =
+   "¡CASI LO LOGRÁS!";
 
 
-    document
-    .getElementById("finalMessage")
-    .textContent =
-    message;
+  document.getElementById(
+   "finalScore"
+  ).innerHTML =
+   "Llegaste hasta el <b>Nivel "+
+   (nivelActual+1)+
+   "</b>.<br><br>"+
+   "⭐ Puntaje: <b>"+
+   puntos+
+   "</b>";
+
+
+  document.getElementById(
+   "secret"
+  ).innerHTML =
+   "💪 ¡Intentá nuevamente!";
+
+ }
 
 }
 
 
-/* =========================================
+/* =====================================================
    REINICIAR
-========================================= */
+===================================================== */
 
-function restartGame(){
+function reiniciar(){
 
-    clearInterval(timerInterval);
-
-    document
-    .getElementById("finalScreen")
-    .classList.add("hidden");
-
-    document
-    .getElementById("gameScreen")
-    .classList.remove("hidden");
+ clearInterval(
+  temporizador
+ );
 
 
-    currentQuestion = 0;
+ nivelActual = 0;
 
-    score = 0;
+ palabrasEncontradas = [];
 
-    lives = 3;
+ primeraCelda = null;
 
-    combo = 0;
+ puntos = 0;
+
+ vidas = 3;
+
+ tiempo = 120;
+
+ jugando = true;
 
 
-    updateLives();
+ document.getElementById("points")
+  .textContent =
+  "0";
 
-    showQuestion();
+
+ document.getElementById("lives")
+  .textContent =
+  "3";
+
+
+ document.getElementById("time")
+  .textContent =
+  "120";
+
+
+ document.getElementById("level")
+  .textContent =
+  "1";
+
+
+ document.getElementById("final")
+  .style.display =
+  "none";
+
+
+ document.getElementById("levelTitle")
+  .textContent =
+  niveles[0].titulo;
+
+
+ crearTablero();
+
+ dibujarTablero();
+
+ dibujarPalabras();
+
+ iniciarTemporizador();
 
 }
+
+
+/* =====================================================
+   INICIAR
+===================================================== */
+
+reiniciar();
 
 </script>
 
 </body>
 </html>
+```
