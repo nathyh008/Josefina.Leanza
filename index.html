@@ -1,928 +1,1424 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Laboratorio Científico</title>
+<title>Laboratorio Científico</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: linear-gradient(135deg, #101827, #182b45, #102d35);
-            min-height: 100vh;
-            color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top left,#4c1d95 0%,transparent 35%),
+        radial-gradient(circle at bottom right,#0369a1 0%,transparent 35%),
+        linear-gradient(135deg,#08111f,#101b35 50%,#071827);
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:18px;
+}
 
-        .game {
-            width: 100%;
-            max-width: 720px;
-            background: #ffffff;
-            color: #172033;
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-        }
+.game{
+    width:100%;
+    max-width:760px;
+    background:rgba(255,255,255,.97);
+    color:#182033;
+    border-radius:28px;
+    padding:28px;
+    box-shadow:0 25px 70px rgba(0,0,0,.45);
+    overflow:hidden;
+}
 
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-        }
+.hidden{
+    display:none!important;
+}
 
-        .header .emoji {
-            font-size: 55px;
-            margin-bottom: 10px;
-        }
+/* INICIO */
 
-        h1 {
-            font-size: 32px;
-            margin-bottom: 8px;
-        }
+.start{
+    text-align:center;
+}
 
-        .subtitle {
-            color: #64748b;
-            font-size: 16px;
-        }
+.logo{
+    font-size:70px;
+    animation:float 2s ease-in-out infinite;
+}
 
-        .progress-area {
-            margin: 25px 0;
-        }
+@keyframes float{
+    0%,100%{transform:translateY(0)}
+    50%{transform:translateY(-8px)}
+}
 
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            font-weight: bold;
-            margin-bottom: 8px;
-        }
+h1{
+    font-size:34px;
+    margin:10px 0;
+}
 
-        .progress-bar {
-            width: 100%;
-            height: 10px;
-            background: #e5e7eb;
-            border-radius: 20px;
-            overflow: hidden;
-        }
+.start h2{
+    font-size:24px;
+    margin:18px 0 10px;
+}
 
-        .progress {
-            height: 100%;
-            width: 0%;
-            background: #2563eb;
-            transition: width 0.4s ease;
-        }
+.start p{
+    color:#64748b;
+    line-height:1.6;
+    margin-bottom:14px;
+}
 
-        .question-box {
-            background: #f1f5f9;
-            border-radius: 18px;
-            padding: 25px;
-            margin-bottom: 20px;
-        }
+.start-button,
+.restart-button{
+    width:100%;
+    border:0;
+    border-radius:16px;
+    padding:17px;
+    margin-top:15px;
+    background:linear-gradient(135deg,#7c3aed,#2563eb);
+    color:#fff;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    box-shadow:0 8px 20px rgba(37,99,235,.3);
+}
 
-        .level {
-            display: inline-block;
-            background: #dbeafe;
-            color: #1d4ed8;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
+.start-button:hover,
+.restart-button:hover{
+    transform:translateY(-2px);
+}
 
-        .question {
-            font-size: 23px;
-            line-height: 1.4;
-            font-weight: bold;
-        }
+/* CABECERA */
 
-        .options {
-            display: grid;
-            gap: 12px;
-        }
+.game-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:18px;
+}
 
-        .option {
-            width: 100%;
-            border: 2px solid #e2e8f0;
-            background: #ffffff;
-            color: #172033;
-            border-radius: 14px;
-            padding: 16px;
-            text-align: left;
-            font-size: 17px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
+.title{
+    font-size:24px;
+    font-weight:bold;
+}
 
-        .option:hover {
-            border-color: #2563eb;
-            background: #eff6ff;
-            transform: translateY(-2px);
-        }
+.subtitle{
+    color:#64748b;
+    font-size:13px;
+    margin-top:3px;
+}
 
-        .option.correct {
-            background: #dcfce7;
-            border-color: #16a34a;
-            color: #166534;
-        }
+.score-box{
+    background:#eef2ff;
+    color:#4338ca;
+    border-radius:14px;
+    padding:10px 14px;
+    font-weight:bold;
+    white-space:nowrap;
+}
 
-        .option.incorrect {
-            background: #fee2e2;
-            border-color: #dc2626;
-            color: #991b1b;
-        }
+/* ESTADO */
 
-        .option:disabled {
-            cursor: default;
-        }
+.status{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:10px;
+    margin-bottom:18px;
+}
 
-        .explanation {
-            display: none;
-            margin-top: 20px;
-            padding: 18px;
-            background: #eff6ff;
-            border-left: 5px solid #2563eb;
-            border-radius: 10px;
-            line-height: 1.5;
-        }
+.status-item{
+    background:#f8fafc;
+    border-radius:14px;
+    padding:11px;
+    text-align:center;
+    font-size:13px;
+}
 
-        .explanation.show {
-            display: block;
-        }
+.status-value{
+    display:block;
+    font-size:19px;
+    font-weight:bold;
+    margin-top:4px;
+}
 
-        .next-button {
-            width: 100%;
-            margin-top: 20px;
-            padding: 16px;
-            border: none;
-            border-radius: 14px;
-            background: #2563eb;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            display: none;
-        }
+.lives{
+    color:#dc2626;
+}
 
-        .next-button:hover {
-            background: #1d4ed8;
-        }
+.combo{
+    color:#ea580c;
+}
 
-        .next-button.show {
-            display: block;
-        }
+.timer{
+    color:#2563eb;
+}
 
-        .score {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 15px;
-            color: #64748b;
-        }
+.timer.danger{
+    color:#dc2626;
+    animation:pulse .5s infinite alternate;
+}
 
-        .start-screen,
-        .final-screen {
-            text-align: center;
-        }
+@keyframes pulse{
+    from{transform:scale(1)}
+    to{transform:scale(1.08)}
+}
 
-        .start-screen h2,
-        .final-screen h2 {
-            font-size: 28px;
-            margin-bottom: 15px;
-        }
+/* PROGRESO */
 
-        .start-screen p,
-        .final-screen p {
-            color: #64748b;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
+.progress-area{
+    margin-bottom:18px;
+}
 
-        .start-button,
-        .restart-button {
-            width: 100%;
-            padding: 17px;
-            border: none;
-            border-radius: 14px;
-            background: #2563eb;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-        }
+.progress-info{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:7px;
+}
 
-        .start-button:hover,
-        .restart-button:hover {
-            background: #1d4ed8;
-        }
+.progress-bar{
+    width:100%;
+    height:9px;
+    background:#e2e8f0;
+    border-radius:20px;
+    overflow:hidden;
+}
 
-        .final-score {
-            font-size: 55px;
-            font-weight: bold;
-            color: #2563eb;
-            margin: 20px 0;
-        }
+.progress{
+    height:100%;
+    width:0;
+    background:linear-gradient(90deg,#7c3aed,#06b6d4);
+    transition:width .3s;
+}
 
-        .message {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
+/* PREGUNTA */
 
-        .hidden {
-            display: none;
-        }
+.level{
+    display:inline-block;
+    padding:7px 13px;
+    border-radius:30px;
+    color:#fff;
+    font-size:12px;
+    font-weight:bold;
+    margin-bottom:13px;
+}
 
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
+.level1{
+    background:linear-gradient(135deg,#16a34a,#22c55e);
+}
 
-            .game {
-                padding: 20px;
-                border-radius: 18px;
-            }
+.level2{
+    background:linear-gradient(135deg,#ea580c,#f97316);
+}
 
-            h1 {
-                font-size: 26px;
-            }
+.level3{
+    background:linear-gradient(135deg,#7c3aed,#c026d3);
+}
 
-            .question {
-                font-size: 20px;
-            }
+.question-box{
+    background:linear-gradient(135deg,#f8fafc,#eef2ff);
+    border-radius:20px;
+    padding:23px;
+    margin-bottom:17px;
+    border:1px solid #e2e8f0;
+}
 
-            .option {
-                font-size: 16px;
-            }
-        }
-    </style>
+.question{
+    font-size:22px;
+    font-weight:bold;
+    line-height:1.45;
+}
+
+/* OPCIONES */
+
+.options{
+    display:grid;
+    gap:11px;
+}
+
+.option{
+    width:100%;
+    background:#fff;
+    color:#182033;
+    border:2px solid #e2e8f0;
+    border-radius:15px;
+    padding:15px;
+    text-align:left;
+    font-size:16px;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.option:hover:not(:disabled){
+    border-color:#6366f1;
+    background:#eef2ff;
+    transform:translateX(4px);
+}
+
+.option.correct{
+    background:#dcfce7;
+    border-color:#16a34a;
+    color:#166534;
+}
+
+.option.incorrect{
+    background:#fee2e2;
+    border-color:#dc2626;
+    color:#991b1b;
+}
+
+.option:disabled{
+    cursor:default;
+}
+
+/* EXPLICACIÓN */
+
+.explanation{
+    display:none;
+    margin-top:17px;
+    padding:17px;
+    border-radius:15px;
+    background:#ecfeff;
+    border-left:5px solid #0891b2;
+    color:#164e63;
+    line-height:1.55;
+}
+
+.explanation.show{
+    display:block;
+}
+
+/* BOTÓN */
+
+.next{
+    width:100%;
+    display:none;
+    border:0;
+    border-radius:15px;
+    padding:15px;
+    margin-top:16px;
+    background:#172554;
+    color:white;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.next.show{
+    display:block;
+}
+
+/* FINAL */
+
+.final{
+    text-align:center;
+}
+
+.trophy{
+    font-size:75px;
+}
+
+.final h2{
+    font-size:30px;
+    margin:12px 0;
+}
+
+.final-score{
+    font-size:60px;
+    font-weight:bold;
+    color:#4f46e5;
+    margin:20px 0;
+}
+
+.final p{
+    color:#64748b;
+    line-height:1.6;
+    margin-bottom:10px;
+}
+
+.medal{
+    font-size:45px;
+    margin:10px;
+}
+
+@media(max-width:600px){
+
+    body{
+        padding:8px;
+    }
+
+    .game{
+        padding:19px;
+        border-radius:21px;
+    }
+
+    h1{
+        font-size:28px;
+    }
+
+    .game-header{
+        align-items:flex-start;
+    }
+
+    .title{
+        font-size:20px;
+    }
+
+    .score-box{
+        font-size:13px;
+        padding:8px;
+    }
+
+    .status{
+        gap:6px;
+    }
+
+    .status-item{
+        padding:9px 4px;
+        font-size:11px;
+    }
+
+    .status-value{
+        font-size:17px;
+    }
+
+    .question{
+        font-size:19px;
+    }
+
+    .option{
+        font-size:15px;
+    }
+}
+</style>
 </head>
 
 <body>
 
 <div class="game">
 
-    <!-- PANTALLA DE INICIO -->
+<!-- =========================
+     PANTALLA INICIAL
+========================= -->
 
-    <div id="startScreen" class="start-screen">
+<div id="startScreen" class="start">
 
-        <div class="header">
-            <div class="emoji">🧪</div>
+    <div class="logo">🧪</div>
 
-            <h1>Laboratorio Científico</h1>
+    <h1>Laboratorio Científico</h1>
 
-            <p class="subtitle">
-                Poné a prueba tus conocimientos
-            </p>
+    <p>
+        ¿Tenés lo necesario para convertirte
+        en una mente científica?
+    </p>
+
+    <h2>🔬 El desafío</h2>
+
+    <p>
+        Vas a atravesar <strong>3 niveles</strong>.
+        Las preguntas serán cada vez más difíciles
+        y tendrás tiempo limitado para responder.
+    </p>
+
+    <p>
+        ⚡ Cuanto más rápido respondas correctamente,
+        más puntos podés conseguir.
+    </p>
+
+    <p>
+        ❤️ Tenés 3 vidas.
+    </p>
+
+    <button
+        class="start-button"
+        onclick="startGame()">
+
+        🚀 COMENZAR EXPERIMENTO
+
+    </button>
+
+</div>
+
+
+<!-- =========================
+     JUEGO
+========================= -->
+
+<div id="gameScreen" class="hidden">
+
+    <div class="game-header">
+
+        <div>
+
+            <div class="title">
+                🧪 Laboratorio Científico
+            </div>
+
+            <div class="subtitle">
+                Desafío de conocimientos
+            </div>
+
         </div>
 
-        <h2>🔬 ¿Estás listo?</h2>
+        <div class="score-box">
 
-        <p>
-            Vas a enfrentar 5 desafíos científicos.
-            Algunas preguntas tienen que ver con mezclas,
-            reacciones químicas, materia y fenómenos cotidianos.
-        </p>
+            ⭐ <span id="score">0</span>
 
-        <p>
-            Cada respuesta correcta suma puntos.
-            ¡Pero lo más importante es descubrir por qué!
-        </p>
-
-        <button
-            class="start-button"
-            onclick="startGame()">
-            🚀 Comenzar experimento
-        </button>
+        </div>
 
     </div>
 
 
-    <!-- PANTALLA DEL JUEGO -->
+    <div class="status">
 
-    <div id="gameScreen" class="hidden">
+        <div class="status-item">
 
-        <div class="header">
+            ❤️ Vidas
 
-            <div class="emoji">🧪</div>
+            <span
+                id="lives"
+                class="status-value lives">
 
-            <h1>Laboratorio Científico</h1>
+                ❤️❤️❤️
 
-        </div>
-
-
-        <div class="progress-area">
-
-            <div class="progress-info">
-
-                <span id="questionNumber">
-                    Desafío 1 de 5
-                </span>
-
-                <span>
-                    ⭐ <span id="score">0</span> puntos
-                </span>
-
-            </div>
-
-            <div class="progress-bar">
-
-                <div
-                    id="progress"
-                    class="progress">
-                </div>
-
-            </div>
+            </span>
 
         </div>
 
 
-        <div class="question-box">
+        <div class="status-item">
+
+            🔥 Combo
+
+            <span
+                id="combo"
+                class="status-value combo">
+
+                x0
+
+            </span>
+
+        </div>
+
+
+        <div class="status-item">
+
+            ⏱️ Tiempo
+
+            <span
+                id="timer"
+                class="status-value timer">
+
+                15
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="progress-area">
+
+        <div class="progress-info">
+
+            <span id="questionNumber">
+                Pregunta 1 de 9
+            </span>
+
+            <span id="levelText">
+                Nivel 1
+            </span>
+
+        </div>
+
+        <div class="progress-bar">
 
             <div
-                id="level"
-                class="level">
-                NIVEL 1
+                id="progress"
+                class="progress">
             </div>
-
-            <div
-                id="question"
-                class="question">
-            </div>
-
-        </div>
-
-
-        <div
-            id="options"
-            class="options">
-        </div>
-
-
-        <div
-            id="explanation"
-            class="explanation">
-        </div>
-
-
-        <button
-            id="nextButton"
-            class="next-button"
-            onclick="nextQuestion()">
-
-            Siguiente desafío →
-
-        </button>
-
-
-        <div class="score">
-
-            Cada respuesta correcta vale
-            <strong>2 puntos</strong>.
 
         </div>
 
     </div>
 
 
-    <!-- PANTALLA FINAL -->
-
-    <div id="finalScreen" class="final-screen hidden">
-
-        <div class="header">
-
-            <div class="emoji">🏆</div>
-
-            <h1>¡Experimento terminado!</h1>
-
-        </div>
-
-
-        <p id="finalMessage">
-        </p>
-
+    <div class="question-box">
 
         <div
-            id="finalScore"
-            class="final-score">
-            0/10
+            id="levelBadge"
+            class="level level1">
+
+            NIVEL 1
+
         </div>
 
-
-        <p id="finalText">
-        </p>
-
-
-        <button
-            class="restart-button"
-            onclick="restartGame()">
-
-            🔄 Jugar nuevamente
-
-        </button>
+        <div
+            id="question"
+            class="question">
+        </div>
 
     </div>
+
+
+    <div
+        id="options"
+        class="options">
+    </div>
+
+
+    <div
+        id="explanation"
+        class="explanation">
+    </div>
+
+
+    <button
+        id="nextButton"
+        class="next"
+        onclick="nextQuestion()">
+
+        Siguiente desafío →
+
+    </button>
+
+</div>
+
+
+<!-- =========================
+     FINAL
+========================= -->
+
+<div id="finalScreen" class="final hidden">
+
+    <div class="trophy">
+        🏆
+    </div>
+
+    <h2>
+        ¡Experimento terminado!
+    </h2>
+
+    <div
+        id="medal"
+        class="medal">
+    </div>
+
+    <div
+        id="finalScore"
+        class="final-score">
+
+        0
+
+    </div>
+
+    <p
+        id="finalMessage">
+    </p>
+
+    <p>
+        La ciencia no se trata solamente
+        de acertar: también se trata de
+        observar, preguntar y aprender.
+    </p>
+
+    <button
+        class="restart-button"
+        onclick="restartGame()">
+
+        🔄 VOLVER A JUGAR
+
+    </button>
+
+</div>
 
 </div>
 
 
 <script>
 
-    /* =====================================
-       PREGUNTAS DEL JUEGO
-       ===================================== */
+/* =========================================
+   PREGUNTAS
+========================================= */
 
-    const questions = [
+const questions = [
 
-        {
-            level: "NIVEL 1 · MATERIA",
+/* NIVEL 1 */
 
-            question:
-                "¿Cuál de estos ejemplos representa un cambio físico?",
+{
+    level:1,
+    time:15,
 
-            options: [
+    question:
+    "¿Cuál de estos ejemplos representa un cambio físico?",
 
-                "Quemar un papel",
+    options:[
+        "🔥 Quemar un papel",
+        "🧊 Derretir un cubo de hielo",
+        "🔩 Oxidar un clavo"
+    ],
 
-                "Derretir un cubo de hielo",
+    correct:1,
 
-                "Oxidar un clavo"
+    explanation:
+    "🧊 Al derretirse, el hielo sigue siendo agua. Cambia su estado físico, pero no aparece una sustancia nueva."
+},
 
-            ],
+{
+    level:1,
+    time:15,
 
-            correct: 1,
+    question:
+    "¿Qué ocurre cuando mezclamos agua y sal?",
 
-            explanation:
-                "🧊 Cuando el hielo se derrite sigue siendo agua. Cambia su estado, pero no se forma una sustancia nueva. Por eso es un cambio físico."
-        },
+    options:[
+        "💥 Se produce una explosión",
+        "🧂 La sal se disuelve en el agua",
+        "🔥 La sal se transforma en vapor"
+    ],
 
+    correct:1,
 
-        {
-            level: "NIVEL 2 · MEZCLAS",
+    explanation:
+    "🧂 La sal se disuelve. Sus partículas quedan distribuidas en el agua y forman una mezcla homogénea."
+},
 
-            question:
-                "¿Qué sucede cuando mezclamos agua y sal?",
+{
+    level:1,
+    time:15,
 
-            options: [
+    question:
+    "¿Cuál de estos estados de la materia tiene volumen definido pero no forma propia?",
 
-                "La sal desaparece y se transforma en agua",
+    options:[
+        "💧 Líquido",
+        "💨 Gas",
+        "🧊 Sólido"
+    ],
 
-                "La sal se disuelve en el agua",
+    correct:0,
 
-                "Se produce una explosión"
+    explanation:
+    "💧 Los líquidos tienen un volumen definido, pero adoptan la forma del recipiente que los contiene."
+},
 
-            ],
 
-            correct: 1,
+/* NIVEL 2 */
 
-            explanation:
-                "🧂 La sal se disuelve y forma una mezcla homogénea. La sal no desaparece: sus partículas quedan distribuidas por el agua."
-        },
+{
+    level:2,
+    time:12,
 
+    question:
+    "¿Qué sucede cuando mezclamos vinagre y bicarbonato?",
 
-        {
-            level: "NIVEL 3 · REACCIONES",
+    options:[
+        "🫧 Se produce dióxido de carbono y aparecen burbujas",
+        "🧊 El líquido se congela inmediatamente",
+        "💧 El bicarbonato desaparece sin reaccionar"
+    ],
 
-            question:
-                "¿Qué ocurre cuando mezclamos vinagre y bicarbonato?",
+    correct:0,
 
-            options: [
+    explanation:
+    "🫧 El ácido del vinagre reacciona con el bicarbonato y se produce dióxido de carbono. Las burbujas que observamos son ese gas."
+},
 
-                "Se produce una reacción y aparecen burbujas",
+{
+    level:2,
+    time:12,
 
-                "El bicarbonato se convierte en hielo",
+    question:
+    "¿Por qué el aceite queda arriba del agua?",
 
-                "No ocurre absolutamente nada"
+    options:[
+        "🫗 Porque tiene menor densidad y no se mezcla con el agua",
+        "💧 Porque el agua siempre se va al fondo",
+        "🔥 Porque el aceite es más caliente"
+    ],
 
-            ],
+    correct:0,
 
-            correct: 0,
+    explanation:
+    "🫗 El aceite tiene menor densidad que el agua y además no se mezcla con ella. Por eso forma una capa superior."
+},
 
-            explanation:
-                "🫧 El vinagre y el bicarbonato reaccionan químicamente y producen dióxido de carbono. Ese gas forma las burbujas que podemos observar."
-        },
+{
+    level:2,
+    time:12,
 
+    question:
+    "¿Cuál de estas situaciones indica una posible reacción química?",
 
-        {
-            level: "NIVEL 4 · DENSIDAD",
+    options:[
+        "🧊 Un hielo se derrite",
+        "🫧 Aparecen burbujas y se libera gas al mezclar sustancias",
+        "💧 El agua cambia de recipiente"
+    ],
 
-            question:
-                "¿Por qué el aceite queda arriba cuando lo mezclamos con agua?",
+    correct:1,
 
-            options: [
+    explanation:
+    "🫧 La aparición de un gas puede ser una señal de que se está formando una sustancia nueva, característica de una reacción química."
+},
 
-                "Porque el aceite tiene menor densidad y no se mezcla con el agua",
 
-                "Porque el agua empuja siempre cualquier líquido",
+/* NIVEL 3 */
 
-                "Porque el aceite es sólido"
+{
+    level:3,
+    time:10,
 
-            ],
+    question:
+    "Si queremos comprobar si una planta crece más con luz, ¿qué debemos hacer?",
 
-            correct: 0,
+    options:[
+        "🔮 Adivinar el resultado",
+        "🔬 Comparar plantas manteniendo controladas las demás condiciones",
+        "🌱 Elegir solamente la planta que creció más"
+    ],
 
-            explanation:
-                "🫗 El aceite tiene menor densidad que el agua y además no se mezcla con ella. Por eso forma una capa en la parte superior."
-        },
+    correct:1,
 
+    explanation:
+    "🔬 El método científico requiere comparar condiciones y controlar variables para obtener resultados confiables."
+},
 
-        {
-            level: "NIVEL 5 · MÉTODO CIENTÍFICO",
+{
+    level:3,
+    time:10,
 
-            question:
-                "Si queremos saber si una planta crece más rápido con luz o sin luz, ¿qué debemos hacer?",
+    question:
+    "Si una sustancia tiene pH menor que 7, ¿cómo se clasifica?",
 
-            options: [
+    options:[
+        "🧪 Ácida",
+        "💧 Neutra",
+        "🧼 Básica"
+    ],
 
-                "Adivinar qué planta crecerá más",
+    correct:0,
 
-                "Comparar plantas en condiciones controladas",
+    explanation:
+    "🧪 En la escala de pH, los valores menores que 7 corresponden a sustancias ácidas. Un pH de 7 es neutro."
+},
 
-                "Elegir solamente la planta que más nos guste"
+{
+    level:3,
+    time:10,
 
-            ],
+    question:
+    "¿Qué variable debemos modificar para investigar si la temperatura afecta la velocidad de una reacción?",
 
-            correct: 1,
+    options:[
+        "🌡️ La temperatura",
+        "🎲 Todas las variables al mismo tiempo",
+        "📊 Ninguna variable"
+    ],
 
-            explanation:
-                "🔬 Para investigar científicamente debemos comparar condiciones y observar los resultados. Así podemos obtener evidencia en lugar de basarnos en una suposición."
-        }
+    correct:0,
 
-    ];
+    explanation:
+    "🌡️ La variable que modificamos intencionalmente se llama variable independiente. En este experimento sería la temperatura."
+}
 
+];
 
-    /* =====================================
-       VARIABLES DEL JUEGO
-       ===================================== */
 
-    let currentQuestion = 0;
+/* =========================================
+   VARIABLES
+========================================= */
 
-    let score = 0;
+let currentQuestion = 0;
 
-    let answered = false;
+let score = 0;
 
+let lives = 3;
 
-    /* =====================================
-       INICIAR JUEGO
-       ===================================== */
+let combo = 0;
 
-    function startGame() {
+let timer = 0;
 
-        currentQuestion = 0;
+let timerInterval = null;
 
-        score = 0;
+let answered = false;
 
-        answered = false;
 
-        document
-            .getElementById("startScreen")
-            .classList.add("hidden");
+/* =========================================
+   INICIAR
+========================================= */
 
-        document
-            .getElementById("finalScreen")
-            .classList.add("hidden");
+function startGame(){
 
-        document
-            .getElementById("gameScreen")
-            .classList.remove("hidden");
+    currentQuestion = 0;
 
-        showQuestion();
+    score = 0;
 
-    }
+    lives = 3;
 
+    combo = 0;
 
-    /* =====================================
-       MOSTRAR PREGUNTA
-       ===================================== */
+    answered = false;
 
-    function showQuestion() {
+    document
+    .getElementById("startScreen")
+    .classList.add("hidden");
 
-        answered = false;
+    document
+    .getElementById("finalScreen")
+    .classList.add("hidden");
 
-        const question = questions[currentQuestion];
+    document
+    .getElementById("gameScreen")
+    .classList.remove("hidden");
 
+    updateLives();
 
-        document
-            .getElementById("questionNumber")
-            .textContent =
-            "Desafío " +
-            (currentQuestion + 1) +
-            " de " +
-            questions.length;
+    showQuestion();
+}
 
 
-        document
-            .getElementById("score")
-            .textContent = score;
+/* =========================================
+   MOSTRAR PREGUNTA
+========================================= */
 
+function showQuestion(){
 
-        document
-            .getElementById("progress")
-            .style.width =
-            ((currentQuestion) /
-            questions.length * 100) +
-            "%";
+    clearInterval(timerInterval);
 
+    answered = false;
 
-        document
-            .getElementById("level")
-            .textContent =
-            question.level;
+    const q =
+    questions[currentQuestion];
 
+    document
+    .getElementById("score")
+    .textContent = score;
 
-        document
-            .getElementById("question")
-            .textContent =
-            question.question;
+    document
+    .getElementById("combo")
+    .textContent = "x" + combo;
 
+    document
+    .getElementById("questionNumber")
+    .textContent =
+    "Pregunta " +
+    (currentQuestion + 1) +
+    " de " +
+    questions.length;
 
-        const optionsContainer =
-            document.getElementById("options");
+    document
+    .getElementById("levelText")
+    .textContent =
+    "Nivel " + q.level;
 
+    document
+    .getElementById("progress")
+    .style.width =
+    ((currentQuestion) /
+    questions.length * 100) + "%";
 
-        optionsContainer.innerHTML = "";
 
+    const badge =
+    document.getElementById("levelBadge");
 
-        document
-            .getElementById("explanation")
-            .classList.remove("show");
+    badge.textContent =
+    "NIVEL " + q.level;
 
+    badge.className =
+    "level level" + q.level;
 
-        document
-            .getElementById("nextButton")
-            .classList.remove("show");
 
+    document
+    .getElementById("question")
+    .textContent =
+    q.question;
 
-        question.options.forEach(
-            function(option, index) {
 
-                const button =
-                    document.createElement("button");
+    const options =
+    document.getElementById("options");
 
+    options.innerHTML = "";
 
-                button.className =
-                    "option";
 
+    document
+    .getElementById("explanation")
+    .classList.remove("show");
 
-                button.textContent =
-                    option;
 
+    document
+    .getElementById("nextButton")
+    .classList.remove("show");
 
-                button.onclick =
-                    function() {
 
-                        checkAnswer(
-                            index,
-                            button
-                        );
+    q.options.forEach(
+        function(option,index){
 
-                    };
+            const button =
+            document.createElement("button");
 
+            button.className =
+            "option";
 
-                optionsContainer.appendChild(
+            button.textContent =
+            option;
+
+            button.onclick =
+            function(){
+
+                answerQuestion(
+                    index,
                     button
                 );
 
+            };
+
+            options.appendChild(button);
+
+        }
+    );
+
+
+    startTimer(q.time);
+}
+
+
+/* =========================================
+   CRONÓMETRO
+========================================= */
+
+function startTimer(seconds){
+
+    clearInterval(timerInterval);
+
+    timer = seconds;
+
+    updateTimer();
+
+    timerInterval =
+    setInterval(
+        function(){
+
+            timer--;
+
+            updateTimer();
+
+            if(timer <= 0){
+
+                clearInterval(
+                    timerInterval
+                );
+
+                timeOut();
+
             }
+
+        },
+        1000
+    );
+}
+
+
+function updateTimer(){
+
+    const element =
+    document.getElementById("timer");
+
+    element.textContent =
+    timer;
+
+    if(timer <= 5){
+
+        element.classList.add("danger");
+
+    }else{
+
+        element.classList.remove("danger");
+
+    }
+}
+
+
+/* =========================================
+   TIEMPO AGOTADO
+========================================= */
+
+function timeOut(){
+
+    if(answered){
+        return;
+    }
+
+    answered = true;
+
+    lives--;
+
+    combo = 0;
+
+    updateLives();
+
+    const q =
+    questions[currentQuestion];
+
+    const buttons =
+    document.querySelectorAll(".option");
+
+    buttons.forEach(
+        function(button){
+
+            button.disabled = true;
+
+        }
+    );
+
+    buttons[q.correct]
+    .classList.add("correct");
+
+
+    showExplanation(
+        "⏰ ¡Se terminó el tiempo!",
+        q.explanation
+    );
+
+    document
+    .getElementById("nextButton")
+    .classList.add("show");
+
+
+    if(lives <= 0){
+
+        setTimeout(
+            function(){
+
+                showFinalScreen();
+
+            },
+            1500
         );
 
     }
+}
 
 
-    /* =====================================
-       COMPROBAR RESPUESTA
-       ===================================== */
+/* =========================================
+   RESPUESTA
+========================================= */
 
-    function checkAnswer(
-        selectedIndex,
+function answerQuestion(
+    selected,
+    selectedButton
+){
+
+    if(answered){
+        return;
+    }
+
+    answered = true;
+
+    clearInterval(timerInterval);
+
+    const q =
+    questions[currentQuestion];
+
+    const buttons =
+    document.querySelectorAll(".option");
+
+    buttons.forEach(
+        function(button){
+
+            button.disabled = true;
+
+        }
+    );
+
+
+    if(selected === q.correct){
+
         selectedButton
-    ) {
-
-        if (answered) {
-            return;
-        }
-
-        answered = true;
+        .classList
+        .add("correct");
 
 
-        const question =
-            questions[currentQuestion];
+        combo++;
 
 
-        const buttons =
-            document.querySelectorAll(
-                ".option"
-            );
+        /*
+        Puntos:
+        2 base
+        + segundos restantes
+        + bonus de combo
+        */
+
+        const points =
+        2 +
+        timer +
+        (combo * 2);
+
+        score += points;
 
 
-        buttons.forEach(
-            function(button) {
-
-                button.disabled = true;
-
-            }
+        showExplanation(
+            "✅ ¡Respuesta correcta! +" +
+            points +
+            " puntos",
+            q.explanation
         );
 
 
-        if (
-            selectedIndex ===
-            question.correct
-        ) {
+    }else{
 
-            score += 2;
-
-            selectedButton
-                .classList
-                .add("correct");
-
-        } else {
-
-            selectedButton
-                .classList
-                .add("incorrect");
+        selectedButton
+        .classList
+        .add("incorrect");
 
 
-            buttons[
-                question.correct
-            ]
-                .classList
-                .add("correct");
-
-        }
+        buttons[q.correct]
+        .classList
+        .add("correct");
 
 
-        document
-            .getElementById("score")
-            .textContent = score;
+        lives--;
+
+        combo = 0;
+
+        updateLives();
 
 
-        const explanation =
-            document.getElementById(
-                "explanation"
-            );
-
-
-        explanation.innerHTML =
-            "<strong>🔬 Explicación científica:</strong><br><br>" +
-            question.explanation;
-
-
-        explanation
-            .classList
-            .add("show");
-
-
-        document
-            .getElementById("nextButton")
-            .classList
-            .add("show");
+        showExplanation(
+            "❌ Respuesta incorrecta",
+            q.explanation
+        );
 
     }
 
 
-    /* =====================================
-       SIGUIENTE PREGUNTA
-       ===================================== */
-
-    function nextQuestion() {
-
-        currentQuestion++;
+    document
+    .getElementById("score")
+    .textContent = score;
 
 
-        if (
-            currentQuestion >=
-            questions.length
-        ) {
-
-            showFinalScreen();
-
-            return;
-
-        }
+    document
+    .getElementById("combo")
+    .textContent =
+    "x" + combo;
 
 
-        showQuestion();
+    document
+    .getElementById("nextButton")
+    .classList
+    .add("show");
+
+
+    if(lives <= 0){
+
+        document
+        .getElementById("nextButton")
+        .textContent =
+        "🏁 Ver resultado";
+
+    }
+
+}
+
+
+/* =========================================
+   EXPLICACIÓN
+========================================= */
+
+function showExplanation(
+    title,
+    text
+){
+
+    const box =
+    document.getElementById(
+        "explanation"
+    );
+
+    box.innerHTML =
+    "<strong>" +
+    title +
+    "</strong><br><br>" +
+    text;
+
+    box.classList.add("show");
+}
+
+
+/* =========================================
+   VIDAS
+========================================= */
+
+function updateLives(){
+
+    let hearts = "";
+
+    for(
+        let i = 0;
+        i < 3;
+        i++
+    ){
+
+        hearts +=
+        i < lives ? "❤️" : "🖤";
+
+    }
+
+    document
+    .getElementById("lives")
+    .textContent = hearts;
+}
+
+
+/* =========================================
+   SIGUIENTE
+========================================= */
+
+function nextQuestion(){
+
+    if(lives <= 0){
+
+        showFinalScreen();
+
+        return;
+    }
+
+    currentQuestion++;
+
+
+    if(
+        currentQuestion >=
+        questions.length
+    ){
+
+        showFinalScreen();
+
+        return;
+    }
+
+
+    showQuestion();
+}
+
+
+/* =========================================
+   RESULTADO
+========================================= */
+
+function showFinalScreen(){
+
+    clearInterval(timerInterval);
+
+    document
+    .getElementById("gameScreen")
+    .classList.add("hidden");
+
+    document
+    .getElementById("finalScreen")
+    .classList.remove("hidden");
+
+
+    let medal = "";
+
+    let message = "";
+
+
+    if(score >= 90){
+
+        medal = "🥇";
+
+        message =
+        "¡Sos una verdadera mente científica!";
+
+    }
+
+    else if(score >= 60){
+
+        medal = "🥈";
+
+        message =
+        "¡Excelente trabajo! Tus conocimientos científicos son muy buenos.";
+
+    }
+
+    else if(score >= 30){
+
+        medal = "🥉";
+
+        message =
+        "¡Buen trabajo! Estás construyendo una gran base científica.";
+
+    }
+
+    else{
+
+        medal = "🔬";
+
+        message =
+        "¡Buen comienzo! La ciencia se aprende experimentando.";
 
     }
 
 
-    /* =====================================
-       RESULTADO FINAL
-       ===================================== */
-
-    function showFinalScreen() {
-
-        document
-            .getElementById("gameScreen")
-            .classList.add("hidden");
+    document
+    .getElementById("medal")
+    .textContent = medal;
 
 
-        document
-            .getElementById("finalScreen")
-            .classList.remove("hidden");
+    document
+    .getElementById("finalScore")
+    .textContent =
+    score + " puntos";
 
 
-        document
-            .getElementById("finalScore")
-            .textContent =
-            score + "/10";
+    document
+    .getElementById("finalMessage")
+    .textContent =
+    message;
+
+}
 
 
-        let message = "";
+/* =========================================
+   REINICIAR
+========================================= */
 
-        let text = "";
+function restartGame(){
 
+    clearInterval(timerInterval);
 
-        if (score === 10) {
+    document
+    .getElementById("finalScreen")
+    .classList.add("hidden");
 
-            message =
-                "🏆 ¡Excelente trabajo!";
-
-            text =
-                "Tenés una mente científica increíble. " +
-                "Respondiste correctamente todos los desafíos.";
-
-        }
-
-        else if (score >= 6) {
-
-            message =
-                "🔬 ¡Muy bien!";
-
-            text =
-                "Tenés buenos conocimientos científicos. " +
-                "Seguí experimentando y haciendo preguntas.";
-
-        }
-
-        else if (score >= 2) {
-
-            message =
-                "🧪 ¡Buen comienzo!";
-
-            text =
-                "La ciencia se aprende observando, " +
-                "preguntando y experimentando.";
-
-        }
-
-        else {
-
-            message =
-                "🚀 ¡A seguir investigando!";
-
-            text =
-                "Cada error es una oportunidad para aprender " +
-                "algo nuevo.";
-
-        }
+    document
+    .getElementById("gameScreen")
+    .classList.remove("hidden");
 
 
-        document
-            .getElementById("finalMessage")
-            .textContent =
-            message;
+    currentQuestion = 0;
+
+    score = 0;
+
+    lives = 3;
+
+    combo = 0;
 
 
-        document
-            .getElementById("finalText")
-            .textContent =
-            text;
+    updateLives();
 
-    }
+    showQuestion();
 
-
-    /* =====================================
-       REINICIAR
-       ===================================== */
-
-    function restartGame() {
-
-        document
-            .getElementById("finalScreen")
-            .classList.add("hidden");
-
-
-        document
-            .getElementById("gameScreen")
-            .classList.remove("hidden");
-
-
-        currentQuestion = 0;
-
-        score = 0;
-
-        showQuestion();
-
-    }
+}
 
 </script>
 
